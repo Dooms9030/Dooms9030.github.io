@@ -4,60 +4,63 @@
   <meta charset="UTF-8">
   <title>Bar de Harold</title>
   <link rel="stylesheet" href="./css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
   <header>
     <h1>Bar de Harold</h1>
-    <button id="modo-oscuro-button">Modo Oscuro</button>
-    <nav>
+    <div id="header-buttons">
       <button id="menu-button">Menú</button>
-      <ul id="menu-options" style="display: none;">
-        <li><a href="#" id="comida-option">Comida</a></li>
-        <li><a href="#" id="bebida-option">Bebida</a></li>
-      </ul>
-    </nav>
-    <div id="icono-carrito">
-      <img id="carrito-icon" src="assets/img/carrito.png" alt="Carrito">
-      <span id="contador-items">0</span>
+      <div id="menu-options" style="display: none;">
+        <button id="comida-option">Comidas</button>
+        <button id="bebida-option">Bebidas</button>
+      </div>
+      <button id="modo-oscuro">Modo Oscuro</button>
     </div>
   </header>
   <main>
-    <section id="menu-completo">
-
-    </section>
-    <section id="carrito">
-      <h2>Tus productos</h2>
-      <ul id="lista-menu">
-
-      </ul>
-      <p>Total: $<span id="precio-total">0.00</span></p>
-      <button id="finalizar-compra-button" type="button">Finalizar Compra</button>
-      <form id="form-datos" style="display: none;">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" required>
-        <label for="correo">Correo:</label>
-        <input type="email" id="correo" required>
-        <label for="forma-pago">Forma de Pago:</label>
-        <select id="forma-pago" required>
-          <option value="efectivo">Efectivo</option>
-          <option value="credito">Tarjeta de Crédito</option>
-          <option value="debito">Tarjeta de Débito</option>
-        </select>
-        <div id="info-tarjeta" style="display: none;">
-          <label for="numero-tarjeta">Número de Tarjeta:</label>
-          <input type="text" id="numero-tarjeta" maxlength="16" pattern="\d{16}">
-          <label for="codigo-seguridad">Código de Seguridad:</label>
-          <input type="text" id="codigo-seguridad" maxlength="3" pattern="\d{3}">
+    <aside>
+      <h2 id="tus-productos">Tus productos</h2>
+      <div id="menu-completo"></div>
+    </aside>
+    <section>
+      <h2>Carrito de compras</h2>
+      <div id="carrito">
+        <ul id="lista-menu"></ul>
+        <p>Total: $<span id="precio-total">0.00</span></p>
+        <button id="finalizar-compra-button">Finalizar compra</button>
+        <div id="form-datos" style="display:none;">
+          <h3>Datos del comprador</h3>
+          <form>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" required>
+            <label for="correo">Correo:</label>
+            <input type="email" id="correo" required>
+            <label for="forma-pago">Forma de pago:</label>
+            <select id="forma-pago">
+              <option value="debito">Tarjeta de Débito</option>
+              <option value="credito">Tarjeta de Crédito</option>
+              <option value="efectivo">Efectivo</option>
+            </select>
+            <div id="info-tarjeta" style="display: none;">
+              <label for="numero-tarjeta">Número de tarjeta:</label>
+              <input type="text" id="numero-tarjeta" maxlength="16">
+              <label for="codigo-seguridad">Código de seguridad:</label>
+              <input type="text" id="codigo-seguridad" maxlength="3">
+            </div>
+            <button type="submit">Confirmar Compra</button>
+          </form>
         </div>
-        <button type="submit">Realizar Pedido</button>
-      </form>
-    </section>
-    <section id="historial-compras">
-      <h2>Historial de Compras</h2>
-      <button id="eliminar-historial">Eliminar Historial</button>
-
+      </div>
+      <button id="eliminar-historial">Eliminar historial de compras</button>
+      <div id="historial-compra">
+        <!-- Aquí se mostrará el historial de compras -->
+      </div>
     </section>
   </main>
+  <footer>
+    <p> Un lugar para disfrutar en familia </p>
+  </footer>
   <script src="./Carpeta-js/main.js"></script>
 </body>
 </html>

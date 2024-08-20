@@ -1,12 +1,60 @@
-{
-  "menu": [
-    { "id": 1, "categoria": "comidas", "nombre": "Arroz chaufa", "valor": 4500, "imagen": "assets/img/arroz-chaufa.jpg" },
-    { "id": 2, "categoria": "comidas", "nombre": "Pollo frito", "valor": 9500, "imagen": "assets/img/pollo-frito.jpg" },
-    { "id": 3, "categoria": "comidas", "nombre": "Tequeños", "valor": 8000, "imagen": "assets/img/tequeños.jpg" },
-    { "id": 4, "categoria": "comidas", "nombre": "Arepas", "valor": 3000, "imagen": "assets/img/arepas.webp" },
-    { "id": 5, "categoria": "bebidas", "nombre": "Cerveza", "valor": 3000, "imagen": "assets/img/cerveza.jpg" },
-    { "id": 6, "categoria": "bebidas", "nombre": "Ron", "valor": 5000, "imagen": "assets/img/Ron.jpg" },
-    { "id": 7, "categoria": "bebidas", "nombre": "Fernet", "valor": 5000, "imagen": "assets/img/fernet.jpg" },
-    { "id": 8, "categoria": "bebidas", "nombre": "Vodka", "valor": 4000, "imagen": "assets/img/VODKA.jpg" }
-  ]
+  {
+    "menu": [
+        {
+            "id": 1,
+            "categoria": "comidas",
+            "nombre": "Arroz chaufa",
+            "valor": 4500,
+            "imagen": "assets/img/arroz-chaufa.jpg"
+        },
+        {
+            "id": 2,
+            "categoria": "comidas",
+            "nombre": "Pollo frito",
+            "valor": 9500,
+            "imagen": "assets/img/pollo-frito.jpg"
+        },
+        {
+            "id": 3,
+            "categoria": "comidas",
+            "nombre": "Tequeños",
+            "valor": 8000,
+            "imagen": "assets/img/tequeños.jpg"
+        },
+        {
+            "id": 4,
+            "categoria": "comidas",
+            "nombre": "Arepas",
+            "valor": 3000,
+            "imagen": "assets/img/arepas.webp"
+        },
+        {
+            "id": 5,
+            "categoria": "bebidas",
+            "nombre": "Cerveza",
+            "valor": 3000,
+            "imagen": "assets/img/cerveza.jpg"
+        },
+        {
+            "id": 6,
+            "categoria": "bebidas",
+            "nombre": "Ron",
+            "valor": 5000,
+            "imagen": "assets/img/Ron.jpg"
+        },
+        {
+            "id": 7,
+            "categoria": "bebidas",
+            "nombre": "Fernet",
+            "valor": 5000,
+            "imagen": "assets/img/fernet.jpg"
+        },
+        {
+            "id": 8,
+            "categoria": "bebidas",
+            "nombre": "Vodka",
+            "valor": 4000,
+            "imagen": "assets/img/VODKA.jpg"
+        }
+    ]
 }

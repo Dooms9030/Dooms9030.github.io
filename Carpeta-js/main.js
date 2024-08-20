@@ -3,13 +3,18 @@ let menu = [];
 
 // Función para cargar datos desde el JSON
 function cargarDatos() {
-    fetch('./data.json')
+    fetch('../data.json')
         .then(response => response.json())
         .then(data => {
             menu = data.menu;
             mostrarMenu();
         })
         .catch(error => console.error('Error al cargar los datos:', error));
+}
+
+// Función para mostrar el menú completo
+function mostrarMenu() {
+    mostrarProductos(menu);
 }
 
 // Función para guardar el carrito en localStorage
@@ -58,10 +63,18 @@ function actualizarCarrito() {
         precioTotal += item.valor * item.cantidad;
     });
 
-    document.getElementById('precio-total').innerText = precioTotal.toFixed(2);
+    const precioTotalElement = document.getElementById('precio-total');
+    if (precioTotalElement) {
+        precioTotalElement.innerText = precioTotal.toFixed(2);
+    }
+
     guardarCarrito();
     agregarEventosEliminar();
-    document.getElementById('contador-items').innerText = carrito.length;
+
+    const contadorItems = document.getElementById('contador-items');
+    if (contadorItems) {
+        contadorItems.innerText = carrito.length;
+    }
 }
 
 // Función para agregar eventos de eliminación al carrito
@@ -114,24 +127,48 @@ function agregarEventosAgregar() {
         boton.addEventListener('click', () => {
             const id = boton.getAttribute('data-id');
             agregarAlCarrito(id);
+
+            // SweetAlert al agregar al carrito
+            Swal.fire({
+                icon: 'success',
+                title: 'Producto añadido al carrito',
+                showConfirmButton: false,
+                timer: 1500
+            });
         });
     });
 }
 
-// Manejador del botón para eliminar el historial de compras
+// Manejo del botón para eliminar el historial de compras
 document.getElementById('eliminar-historial').addEventListener('click', () => {
-    localStorage.removeItem('historialCompras');
-    cargarHistorial();
-    alert('Historial de compras eliminado.');
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta acción eliminará todo el historial de compras.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminarlo'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            localStorage.removeItem('historialCompras');
+            cargarHistorial();
+            Swal.fire(
+                'Eliminado',
+                'El historial de compras ha sido eliminado.',
+                'success'
+            );
+        }
+    });
 });
 
-// Ajustar el comportamiento del menú para mostrar opciones debajo del botón
+// Manejo del botón de "Menú" para mostrar las opciones debajo del botón
 document.getElementById('menu-button').addEventListener('click', () => {
     const menuOptions = document.getElementById('menu-options');
     menuOptions.style.display = menuOptions.style.display === 'none' ? 'block' : 'none';
 });
 
-// Manejadores de las opciones del menú
+// Manejo de las opciones del menú
 document.getElementById('comida-option').addEventListener('click', () => {
     const productosComida = menu.filter(item => item.categoria === 'comidas');
     mostrarProductos(productosComida);
@@ -142,84 +179,116 @@ document.getElementById('bebida-option').addEventListener('click', () => {
     mostrarProductos(productosBebida);
 });
 
-// Manejador del botón para finalizar la compra
+// Manejo del botón para finalizar la compra
 document.getElementById('finalizar-compra-button').addEventListener('click', () => {
     document.getElementById('form-datos').style.display = 'block';
 });
 
-// Manejador del cambio en el método de pago
-document.getElementById('forma-pago').addEventListener('change', () => {
-    const formaPago = document.getElementById('forma-pago').value;
+// Manejo del cambio en el método de pago
+document.getElementById('forma-pago').addEventListener('change', (event) => {
     const infoTarjeta = document.getElementById('info-tarjeta');
-    infoTarjeta.style.display = (formaPago === 'credito' || formaPago === 'debito') ? 'flex' : 'none';
+    if (event.target.value === 'efectivo') {
+        infoTarjeta.style.display = 'none';
+    } else {
+        infoTarjeta.style.display = 'block';
+    }
 });
 
-// Manejador del formulario de datos del usuario
-document.getElementById('form-datos').addEventListener('submit', (e) => {
-    e.preventDefault();
+// Manejo del formulario de confirmación de compra
+document.querySelector('#form-datos form').addEventListener('submit', (event) => {
+    event.preventDefault();
     const nombre = document.getElementById('nombre').value;
     const correo = document.getElementById('correo').value;
     const formaPago = document.getElementById('forma-pago').value;
 
-    if ((formaPago === 'credito' || formaPago === 'debito') &&
-        (!validarTarjeta() || !validarCodigoSeguridad())) {
-        alert('Por favor ingrese un número de tarjeta y un código de seguridad válidos.');
-        return;
-    }
+    let detallesCompra = `Nombre: ${nombre}\nCorreo: ${correo}\nForma de Pago: ${formaPago}\n\nProductos:\n`;
 
-    const resumenCompra = carrito.map(item => `${item.nombre} x ${item.cantidad}`).join('\n');
-    const montoPagado = document.getElementById('precio-total').innerText;
-    const resumen = `Resumen de la compra:
-${resumenCompra}
-Monto pagado: $${montoPagado}
-Nombre: ${nombre}
-Correo: ${correo}`;
+    carrito.forEach(item => {
+        detallesCompra += `${item.nombre} x ${item.cantidad} - $${(item.valor * item.cantidad).toFixed(2)}\n`;
+    });
 
-    alert(resumen);
-    guardarCompraEnHistorial(resumen);
-    limpiarCarrito();
-});
+    detallesCompra += `\nTotal: $${document.getElementById('precio-total').innerText}`;
 
-// Funciones para validar los datos de la tarjeta
-function validarTarjeta() {
-    const numeroTarjeta = document.getElementById('numero-tarjeta').value;
-    return numeroTarjeta.length === 16;
-}
+    Swal.fire({
+        title: 'Compra realizada',
+        text: detallesCompra,
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
 
-function validarCodigoSeguridad() {
-    const codigoSeguridad = document.getElementById('codigo-seguridad').value;
-    return codigoSeguridad.length === 3;
-}
-
-// Función para limpiar el carrito después de la compra
-function limpiarCarrito() {
+    // Guardar historial de compras
+    guardarHistorial(nombre, correo, carrito, document.getElementById('precio-total').innerText);
+    
+    // Reiniciar carrito
     carrito = [];
     actualizarCarrito();
+    document.getElementById('form-datos').reset();
     document.getElementById('form-datos').style.display = 'none';
-}
+});
 
-// Función para guardar la compra en el historial
-function guardarCompraEnHistorial(compra) {
-    let historial = JSON.parse(localStorage.getItem('historialCompras')) || [];
+// Función para guardar historial de compras
+function guardarHistorial(nombre, correo, carrito, total) {
+    const historial = JSON.parse(localStorage.getItem('historialCompras')) || [];
+    const compra = {
+        nombre,
+        correo,
+        carrito,
+        total,
+        fecha: new Date().toLocaleString()
+    };
     historial.push(compra);
     localStorage.setItem('historialCompras', JSON.stringify(historial));
+    cargarHistorial();
 }
 
-// Función para cargar el historial de compras
+// Función para cargar historial de compras
 function cargarHistorial() {
+    const historialDiv = document.getElementById('historial-compra');
+    historialDiv.innerHTML = '';
     const historial = JSON.parse(localStorage.getItem('historialCompras')) || [];
-    const historialCompra = document.getElementById('historial-compra');
-    historialCompra.innerHTML = '';
+    if (historial.length > 0) {
+        historial.forEach(compra => {
+            const compraDiv = document.createElement('div');
+            compraDiv.className = 'compra';
+            compraDiv.innerHTML = `
+                <h4>Compra realizada el ${compra.fecha}</h4>
+                <p>Nombre: ${compra.nombre}</p>
+                <p>Correo: ${compra.correo}</p>
+                <p>Total: $${compra.total}</p>
+                <h5>Productos:</h5>
+                <ul>
+                    ${compra.carrito.map(item => `<li>${item.nombre} x ${item.cantidad} - $${(item.valor * item.cantidad).toFixed(2)}</li>`).join('')}
+                </ul>
+            `;
+            historialDiv.appendChild(compraDiv);
+        });
+    } else {
+        historialDiv.innerHTML = '<p>No hay historial de compras.</p>';
+    }
+}
 
-    historial.forEach((compra, index) => {
-        const compraDiv = document.createElement('div');
-        compraDiv.innerText = `Compra ${index + 1}:\n${compra}\n\n`;
-        historialCompra.appendChild(compraDiv);
+// Función para eliminar una compra específica del historial
+function eliminarCompraHistorial(index) {
+    let historial = JSON.parse(localStorage.getItem('historialCompras')) || [];
+    historial.splice(index, 1);
+    localStorage.setItem('historialCompras', JSON.stringify(historial));
+    cargarHistorial();
+
+    Swal.fire({
+        title: 'Compra eliminada',
+        text: 'La compra ha sido eliminada del historial.',
+        icon: 'success',
+        confirmButtonText: 'OK'
     });
 }
 
-// Cargar los datos del JSON al cargar la página
-window.addEventListener('DOMContentLoaded', () => {
+// Manejo del botón de modo oscuro
+document.getElementById('modo-oscuro').addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+});
+
+// Inicialización de la aplicación
+document.addEventListener('DOMContentLoaded', () => {
     cargarDatos();
     cargarCarrito();
     cargarHistorial();
