@@ -248,7 +248,7 @@ button {
   cursor: pointer;
 }
 
-#historial-compras {
+#historial-compra {
   margin-top: 20px;
   padding: 15px;
   border-top: 1px solid #ccc;
@@ -258,11 +258,11 @@ button {
   border-radius: 10px;
 }
 
-#historial-compras h2 {
+#historial-compra h2 {
   margin-top: 0;
 }
 
-#historial-compras .compra {
+#historial-compra .compra {
   padding: 10px;
   border: 1px solid #ccc;
   margin-bottom: 10px;
@@ -270,30 +270,30 @@ button {
   background-color: #f9f9f9;
 }
 
-#historial-compras .compra:hover {
+#historial-compra .compra:hover {
   background-color: #e0e0e0;
 }
 
-body.dark-mode {
+body.modo-oscuro {
   background-color: #333;
   color: #f5f5f5;
 }
 
-body.dark-mode header {
+body.modo-oscuro header {
   background-color: #222;
   color: #fff;
 }
 
-body.dark-mode #menu-options {
+body.modo-oscuro #menu-options {
   background-color: #444;
 }
 
-body.dark-mode #historial-compras .compra {
+body.modo-oscuro #historial-compra .compra {
   background-color: #555;
   border-color: #777;
 }
 
-body.dark-mode #historial-compras .compra:hover {
+body.modo-oscuro #historial-compra .compra:hover {
   background-color: #666;
 }
 

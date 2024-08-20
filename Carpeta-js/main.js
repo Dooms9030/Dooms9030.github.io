@@ -272,7 +272,18 @@ function cargarHistorial() {
     const historialDiv = document.getElementById('historial-compra');
     const historial = JSON.parse(localStorage.getItem('historialCompras')) || [];
     historialDiv.innerHTML = '';
+
+    if (!Array.isArray(historial)) {
+        console.error('Historial de compras no es un array');
+        return;
+    }
+
     historial.forEach((compra, index) => {
+        if (!compra.carrito || !Array.isArray(compra.carrito)) {
+            console.error('Carrito en el historial de compras no es un array válido');
+            return;
+        }
+
         const compraDiv = document.createElement('div');
         compraDiv.className = 'compra-historial';
         compraDiv.innerHTML = `
@@ -287,8 +298,8 @@ function cargarHistorial() {
     });
 }
 
-// Cargar datos y carrito al iniciar la página
-document.addEventListener('DOMContentLoaded', () => {
+// Cargar carrito y datos al inicio
+window.addEventListener('load', () => {
     cargarDatos();
     cargarCarrito();
     cargarHistorial();
