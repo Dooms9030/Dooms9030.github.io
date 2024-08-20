@@ -269,7 +269,7 @@ function guardarHistorial(nombre, correo, carrito, total) {
 
 // Función para cargar historial de compras
 function cargarHistorial() {
-    const historialDiv = document.getElementById('historial-compras');
+    const historialDiv = document.getElementById('historial-compra');
     const historial = JSON.parse(localStorage.getItem('historialCompras')) || [];
     historialDiv.innerHTML = '';
     historial.forEach((compra, index) => {
