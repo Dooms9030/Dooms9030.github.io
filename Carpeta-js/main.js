@@ -201,6 +201,32 @@ document.querySelector('#form-datos form').addEventListener('submit', (event) =>
     const correo = document.getElementById('correo').value;
     const formaPago = document.getElementById('forma-pago').value;
 
+    // Validaciones para los campos de tarjeta
+    if (formaPago !== 'efectivo') {
+        const numeroTarjeta = document.getElementById('numero-tarjeta').value;
+        const codigoSeguridad = document.getElementById('codigo-seguridad').value;
+
+        if (!/^\d{16}$/.test(numeroTarjeta)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Número de tarjeta inválido',
+                text: 'El número de la tarjeta debe contener exactamente 16 dígitos.',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        if (!/^\d{3}$/.test(codigoSeguridad)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Código de seguridad inválido',
+                text: 'El código de seguridad debe contener exactamente 3 dígitos.',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+    }
+
     let detallesCompra = `Nombre: ${nombre}\nCorreo: ${correo}\nForma de Pago: ${formaPago}\n\nProductos:\n`;
 
     carrito.forEach(item => {
@@ -243,51 +269,25 @@ function guardarHistorial(nombre, correo, carrito, total) {
 
 // Función para cargar historial de compras
 function cargarHistorial() {
-    const historialDiv = document.getElementById('historial-compra');
-    historialDiv.innerHTML = '';
+    const historialDiv = document.getElementById('historial-compras');
     const historial = JSON.parse(localStorage.getItem('historialCompras')) || [];
-    if (historial.length > 0) {
-        historial.forEach(compra => {
-            const compraDiv = document.createElement('div');
-            compraDiv.className = 'compra';
-            compraDiv.innerHTML = `
-                <h4>Compra realizada el ${compra.fecha}</h4>
-                <p>Nombre: ${compra.nombre}</p>
-                <p>Correo: ${compra.correo}</p>
-                <p>Total: $${compra.total}</p>
-                <h5>Productos:</h5>
-                <ul>
-                    ${compra.carrito.map(item => `<li>${item.nombre} x ${item.cantidad} - $${(item.valor * item.cantidad).toFixed(2)}</li>`).join('')}
-                </ul>
-            `;
-            historialDiv.appendChild(compraDiv);
-        });
-    } else {
-        historialDiv.innerHTML = '<p>No hay historial de compras.</p>';
-    }
-}
-
-// Función para eliminar una compra específica del historial
-function eliminarCompraHistorial(index) {
-    let historial = JSON.parse(localStorage.getItem('historialCompras')) || [];
-    historial.splice(index, 1);
-    localStorage.setItem('historialCompras', JSON.stringify(historial));
-    cargarHistorial();
-
-    Swal.fire({
-        title: 'Compra eliminada',
-        text: 'La compra ha sido eliminada del historial.',
-        icon: 'success',
-        confirmButtonText: 'OK'
+    historialDiv.innerHTML = '';
+    historial.forEach((compra, index) => {
+        const compraDiv = document.createElement('div');
+        compraDiv.className = 'compra-historial';
+        compraDiv.innerHTML = `
+            <h4>Compra #${index + 1}</h4>
+            <p><strong>Nombre:</strong> ${compra.nombre}</p>
+            <p><strong>Correo:</strong> ${compra.correo}</p>
+            <p><strong>Total:</strong> $${compra.total}</p>
+            <p><strong>Fecha:</strong> ${compra.fecha}</p>
+            <ul>${compra.carrito.map(item => `<li>${item.nombre} x ${item.cantidad} - $${(item.valor * item.cantidad).toFixed(2)}</li>`).join('')}</ul>
+        `;
+        historialDiv.appendChild(compraDiv);
     });
 }
 
-// Manejo del botón de modo oscuro
-document.getElementById('modo-oscuro').addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-});
-
-// Inicialización de la aplicación
+// Cargar datos y carrito al iniciar la página
 document.addEventListener('DOMContentLoaded', () => {
     cargarDatos();
     cargarCarrito();
